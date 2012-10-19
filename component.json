@@ -3,7 +3,7 @@
   "repo": "adamsanderson/trigger-event",
   "description": "Trigger native DOM events",
   "version": "0.0.1",
-  "keywords": [],
+  "keywords": ["event", "events", "dom", "trigger"],
   "dependencies": { 
     "component/inherit": "*"
   },
