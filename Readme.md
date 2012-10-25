@@ -5,7 +5,7 @@ triggering common DOM events such as the `change` event for custom components.
 
 ## Installation
  
-    component install adamsanderson/inline-edit
+    component install adamsanderson/trigger-event
 
 See [component](https://github.com/component/component#component) for more information.
 
