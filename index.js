@@ -19,6 +19,7 @@ var eventTypes = {
   blur:        'HTMLEvents', 
   resize:      'HTMLEvents', 
   scroll:      'HTMLEvents', 
+  input:       'HTMLEvents', 
   
   click:       'MouseEvents',
   dblclick:    'MouseEvents', 
