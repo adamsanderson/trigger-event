@@ -57,5 +57,19 @@ describe('triggering', function(){
       }
     });
   });
-  
+
+  describe('CustomEvents', function(){
+    it('triggers single custom event with detail', function(){
+      var calls = 0;
+      function called(evt){
+        calls++;
+        assert(evt.detail === 'expected');
+      }
+
+      triggerAndCatch(document.body, 'some-custom-event', {bubbles: true, detail: 'expected'}, called);
+
+      assert(calls === 1);
+    });
+  });
+ 
 })
