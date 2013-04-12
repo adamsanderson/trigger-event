@@ -58,11 +58,8 @@ var defaults = {
 function trigger(el, name, options){
   var event, type;
   
-  type = eventTypes[name];
-  if (!type) {
-    throw new SyntaxError('Unknown event type: '+type);
-  }
-  
+  type = eventTypes[name] || 'CustomEvent';
+
   options = options || {};
   inherit(defaults, options);
   
@@ -107,5 +104,8 @@ var initializers = {
     return event.initMouseEvent(name, o.bubbles, o.cancelable, document.defaultView, 
           clicks, screenX, screenY, o.clientX, o.clientY,
           o.ctrlKey, o.altKey, o.shiftKey, o.metaKey, button, el);
+  },
+  CustomEvent: function(el, name, event, o){
+    return event.initCustomEvent(name, o.bubbles, o.cancelable, o.detail);
   }
 };
