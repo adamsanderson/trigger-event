@@ -58,13 +58,12 @@ var defaults = {
 function trigger(el, name, options){
   var event, type;
   
-  type = eventTypes[name] || 'CustomEvent';
-
   options = options || {};
   inherit(defaults, options);
   
   if (document.createEvent) {
     // Standard Event
+    type = eventTypes[name] || 'CustomEvent';
     event = document.createEvent(type);
     initializers[type](el, name, event, options);
     el.dispatchEvent(event);
