@@ -32,6 +32,8 @@ MouseEvents support the following options:
     shiftKey
     metaKey
     button (mouse button)
+    
+Any other event will be triggered as a [CustomEvent](https://developer.mozilla.org/en-US/docs/DOM/Event/CustomEvent).
 
 See the [W3C Event Spec](http://www.w3.org/TR/DOM-Level-2-Events/events.html) for more details.
 
@@ -41,6 +43,8 @@ types for supported events.
 ## Attribution
 
 This is loosely based on [kangax](https://github.com/kangax)'s [event.simulate.js](https://github.com/kangax/protolicious/blob/master/event.simulate.js).
+
+Contributions from [Tim Oxley](https://github.com/timoxley) and  [Manuel Stofer](https://github.com/manuelstofer).
 
 ## License 
 MIT
