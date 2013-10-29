@@ -4,9 +4,7 @@
   "description": "Trigger native DOM events",
   "version": "0.0.2",
   "keywords": ["event", "events", "dom", "trigger"],
-  "dependencies": { 
-    "component/inherit": "*"
-  },
+  "dependencies": {},
   "development": {
     "component/event": "*",
     "component/assert": "*"

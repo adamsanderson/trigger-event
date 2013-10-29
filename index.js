@@ -1,4 +1,3 @@
-var inherit = require('inherit');
 module.exports = trigger;
 
 /** 
@@ -19,7 +18,10 @@ var eventTypes = {
   blur:        'HTMLEvents', 
   resize:      'HTMLEvents', 
   scroll:      'HTMLEvents', 
-  input:       'HTMLEvents', 
+  input:       'HTMLEvents',
+
+  keyup:	   'KeyboardEvent',
+  keydown:	   'KeyboardEvent',
   
   click:       'MouseEvents',
   dblclick:    'MouseEvents', 
@@ -41,7 +43,13 @@ var defaults = {
   shiftKey: false,
   metaKey: false,
   bubbles: true,
-  cancelable: true
+  cancelable: true,
+  view: null,
+  key: '',
+  location: 0,
+  modifiers: '',
+  repeat: 0,
+  locale: ''
 };
 
 /**
@@ -59,7 +67,11 @@ function trigger(el, name, options){
   var event, type;
   
   options = options || {};
-  inherit(defaults, options);
+  for (var attr in defaults) {
+	  if (!options.hasOwnProperty(attr)) {
+		  options[attr] = defaults[attr];
+	  }
+  }
   
   if (document.createEvent) {
     // Standard Event
@@ -80,6 +92,35 @@ function trigger(el, name, options){
 var initializers = {
   HTMLEvents: function(el, name, event, o){
     return event.initEvent(name, o.bubbles, o.cancelable);
+  },
+  KeyboardEvent: function(el, name, event, o){
+	// This is still incomplete, but useful for unit testing
+    if (event.initKeyboardEvent) {
+		return event.initKeyboardEvent(
+			name,
+			o.bubbles,
+			o.cancelable,
+			o.view,
+			'' + o.key,
+			o.location,
+			o.modifiers,
+			o.repeat,
+			o.locale
+		);
+	} else {
+		return event.initKeyEvent(
+			name,
+			o.bubbles,
+			o.cancelable,
+			o.view,
+			o.ctrlKey,
+			o.altKey,
+			o.shiftKey,
+			o.metaKey,
+			o.key,
+			o.key
+		);
+	}
   },
   MouseEvents: function(el, name, event, o){
     var screenX = ('screenX' in o) ? o.screenX : o.clientX;

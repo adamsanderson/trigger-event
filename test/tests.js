@@ -23,6 +23,25 @@ describe('triggering', function(){
     });
   });
   
+  describe('KeyboardEvent', function(){
+    it('triggers keydown event', function(){
+      var calls = 0;
+      function called(){ calls++; }
+      
+      triggerAndCatch(document.body, 'keydown', called);
+      
+      assert(calls === 1);
+    });
+    
+    it('triggers keyup event', function(){
+      var calls = 0;
+      function called(){ calls++; }
+      
+      triggerAndCatch(document.body, 'keyup', called);
+      
+      assert(calls === 1);
+    });
+  });  
   describe('MouseEvents', function(){
     it('triggers single click event', function(){
       var calls = 0;
