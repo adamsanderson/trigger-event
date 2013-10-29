@@ -1,4 +1,3 @@
-var inherit = require('inherit');
 module.exports = trigger;
 
 /** 
@@ -45,11 +44,11 @@ var defaults = {
   metaKey: false,
   bubbles: true,
   cancelable: true,
-  view: undefined,
-  key: undefined,
+  view: null,
+  key: '',
   location: 0,
   modifiers: '',
-  repeat: 1,
+  repeat: 0,
   locale: ''
 };
 
@@ -68,7 +67,11 @@ function trigger(el, name, options){
   var event, type;
   
   options = options || {};
-  inherit(defaults, options);
+  for (var attr in defaults) {
+	  if (!options.hasOwnProperty(attr)) {
+		  options[attr] = defaults[attr];
+	  }
+  }
   
   if (document.createEvent) {
     // Standard Event
@@ -93,6 +96,7 @@ var initializers = {
   KeyboardEvent: function(el, name, event, o){
 	// This is still incomplete, but useful for unit testing
     if (event.initKeyboardEvent) {
+console.log(event.initKeyboardEvent);
 		return event.initKeyboardEvent(
 			name,
 			o.bubbles,
