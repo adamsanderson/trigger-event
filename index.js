@@ -96,7 +96,6 @@ var initializers = {
   KeyboardEvent: function(el, name, event, o){
 	// This is still incomplete, but useful for unit testing
     if (event.initKeyboardEvent) {
-console.log(event.initKeyboardEvent);
 		return event.initKeyboardEvent(
 			name,
 			o.bubbles,
