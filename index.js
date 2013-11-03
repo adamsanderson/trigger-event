@@ -2,8 +2,7 @@ module.exports = trigger;
 
 /** 
   Event type mappings.
-  This is not an exhaustive list, feel free to fork and contribute more.
-  Namely keyboard events are not currently supported.
+  This is not an exhaustive list.
 */
 var eventTypes = {
   load:        'HTMLEvents', 
@@ -20,7 +19,7 @@ var eventTypes = {
   scroll:      'HTMLEvents', 
   input:       'HTMLEvents',
 
-  keyup:	   'KeyboardEvent',
+  keyup:	     'KeyboardEvent',
   keydown:	   'KeyboardEvent',
   
   click:       'MouseEvents',
@@ -35,21 +34,21 @@ var eventTypes = {
 
 // Default event properties:
 var defaults = {
-  clientX: 0,
-  clientY: 0,
-  button: 0,
-  ctrlKey: false,
-  altKey: false,
-  shiftKey: false,
-  metaKey: false,
-  bubbles: true,
+  clientX:    0,
+  clientY:    0,
+  button:     0,
+  ctrlKey:    false,
+  altKey:     false,
+  shiftKey:   false,
+  metaKey:    false,
+  bubbles:    true,
   cancelable: true,
-  view: null,
-  key: '',
-  location: 0,
-  modifiers: '',
-  repeat: 0,
-  locale: ''
+  view:       document.defaultView,
+  key:        '',
+  location:   0,
+  modifiers:  '',
+  repeat:     0,
+  locale:     ''
 };
 
 /**
@@ -93,35 +92,45 @@ var initializers = {
   HTMLEvents: function(el, name, event, o){
     return event.initEvent(name, o.bubbles, o.cancelable);
   },
+  
   KeyboardEvent: function(el, name, event, o){
-	// This is still incomplete, but useful for unit testing
+    // Use a blank key if not defined and initialize the charCode
+    var key = ('key' in o) ? o.key : "";
+    var charCode;
+    var modifiers;
+    
+    // 0 is the default location
+    var location = ('location' in o) ? o.location : 0;
+    
     if (event.initKeyboardEvent) {
-		return event.initKeyboardEvent(
-			name,
-			o.bubbles,
-			o.cancelable,
-			o.view,
-			'' + o.key,
-			o.location,
-			o.modifiers,
-			o.repeat,
-			o.locale
-		);
-	} else {
-		return event.initKeyEvent(
-			name,
-			o.bubbles,
-			o.cancelable,
-			o.view,
-			o.ctrlKey,
-			o.altKey,
-			o.shiftKey,
-			o.metaKey,
-			o.key,
-			o.key
-		);
-	}
+      // Chrome and IE9+ uses initKeyboardEvent
+      if (! 'modifiers' in o) {
+        modifiers = [];
+        if (o.ctrlKey) modifiers.push("Ctrl");
+        if (o.altKey) modifiers.push("Alt");
+        if (o.ctrlKey && o.altKey) modifiers.push("AltGraph");
+        if (o.shiftKey) modifiers.push("Shift");
+        if (o.metaKey) modifiers.push("Meta");
+        modifiers = modifiers.join(" ");
+      } else {
+        modifiers = o.modifiers;
+      }
+      
+  		return event.initKeyboardEvent(
+        name, o.bubbles, o.cancelable, o.view, 
+        key, location, modifiers, o.repeat, o.locale
+      );
+  	} else {
+      // Mozilla uses initKeyEvent
+      charCode = ('charCode' in o) ? o.charCode : key.charCodeAt(0) || 0;
+  		return event.initKeyEvent(
+  			name, o.bubbles, o.cancelable, o.view, 
+        o.ctrlKey, o.altKey, o.shiftKey,
+  			o.metaKey, charCode, key
+  		);
+  	}
   },
+  
   MouseEvents: function(el, name, event, o){
     var screenX = ('screenX' in o) ? o.screenX : o.clientX;
     var screenY = ('screenY' in o) ? o.screenY : o.clientY;
@@ -141,10 +150,11 @@ var initializers = {
       button = button = o.button || 2;
     }
     
-    return event.initMouseEvent(name, o.bubbles, o.cancelable, document.defaultView, 
+    return event.initMouseEvent(name, o.bubbles, o.cancelable, o.view, 
           clicks, screenX, screenY, o.clientX, o.clientY,
           o.ctrlKey, o.altKey, o.shiftKey, o.metaKey, button, el);
   },
+  
   CustomEvent: function(el, name, event, o){
     return event.initCustomEvent(name, o.bubbles, o.cancelable, o.detail);
   }
