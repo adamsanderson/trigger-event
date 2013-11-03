@@ -44,7 +44,11 @@ types for supported events.
 
 This is loosely based on [kangax](https://github.com/kangax)'s [event.simulate.js](https://github.com/kangax/protolicious/blob/master/event.simulate.js).
 
-Contributions from [Tim Oxley](https://github.com/timoxley) and  [Manuel Stofer](https://github.com/manuelstofer).
+Contributions from: 
+
+* [Tim Oxley](https://github.com/timoxley)
+* [Manuel Stofer](https://github.com/manuelstofer)
+* [John Syrinek](https://github.com/johntron)
 
 ## License 
 MIT
